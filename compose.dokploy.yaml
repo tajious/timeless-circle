@@ -1,0 +1,38 @@
+services:
+  timeless-circle:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    configs:
+      - source: timeless-circle-page
+        target: /usr/share/nginx/html/index.html
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+configs:
+  timeless-circle-page:
+    content: |
+      <!doctype html>
+      <html lang="en">
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="theme-color" content="#11131a" />
+          <meta name="description" content="Join the Timeless Circle community on Discord." />
+          <title>Timeless Circle</title>
+          <style>
+            :root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b0c11;color:#f7f7fb}*{box-sizing:border-box}body{min-height:100vh;margin:0;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 20% 15%,rgba(88,101,242,.26),transparent 34rem),radial-gradient(circle at 82% 80%,rgba(171,117,255,.17),transparent 32rem),#0b0c11}body:before{content:"";position:fixed;inset:0;opacity:.16;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle at center,#000,transparent 72%);pointer-events:none}main{width:min(92vw,580px);padding:clamp(2rem,6vw,4rem);text-align:center;border:1px solid rgba(255,255,255,.12);border-radius:28px;background:rgba(18,20,28,.72);box-shadow:0 30px 90px rgba(0,0,0,.5);backdrop-filter:blur(18px)}.mark{width:72px;height:72px;margin:0 auto 1.6rem;display:grid;place-items:center;border-radius:22px;font-size:2rem;background:linear-gradient(145deg,#6670ff,#8b5cf6);box-shadow:0 14px 36px rgba(88,101,242,.36)}h1{margin:0;font-size:clamp(2.4rem,8vw,4.6rem);line-height:.98;letter-spacing:-.06em}p{margin:1.25rem auto 2rem;max-width:34ch;color:#b9bbc7;font-size:1.08rem;line-height:1.65}a{display:inline-flex;align-items:center;justify-content:center;gap:.65rem;min-height:56px;padding:0 1.6rem;border-radius:16px;background:#5865f2;color:#fff;font-weight:750;text-decoration:none;box-shadow:0 12px 30px rgba(88,101,242,.3);transition:transform .18s ease,background .18s ease,box-shadow .18s ease}a:hover{transform:translateY(-2px);background:#6873f5;box-shadow:0 16px 38px rgba(88,101,242,.4)}a:focus-visible{outline:3px solid #b7bcff;outline-offset:4px}.arrow{font-size:1.25em}
+          </style>
+        </head>
+        <body>
+          <main>
+            <div class="mark" aria-hidden="true">∞</div>
+            <h1>Timeless<br />Circle</h1>
+            <p>A place to connect, share, and be part of the circle.</p>
+            <a href="https://discord.gg/mSsTgJaYZu" rel="noopener noreferrer">Join us on Discord <span class="arrow" aria-hidden="true">→</span></a>
+          </main>
+        </body>
+      </html>
