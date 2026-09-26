@@ -27,6 +27,30 @@
         .crest { width: 170px; }
         .invite-code { font-size: .68rem; }
       }
+      .copy-invite {
+        margin: .85rem 0 0;
+        padding: .35rem .5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: .65rem;
+        border: 0;
+        border-radius: 7px;
+        color: #858ba3;
+        background: transparent;
+        font: inherit;
+        cursor: pointer;
+        transition: color .2s ease, background .2s ease;
+      }
+      .copy-invite:hover { color: #cbd0e4; background: rgba(255,255,255,.045); }
+      .copy-invite:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
+      .invite-code { font-size: .75rem; letter-spacing: .045em; }
+      .copy-action { color: var(--gold); font-size: .64rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+      .invite-help { max-width: 48ch; margin: .45rem 0 0; color: #6f758a; font-size: .73rem; line-height: 1.55; }
+      .invite-help strong { color: #969caf; font-weight: 600; }
+      @media (max-width: 760px) {
+        .copy-invite { margin-top: .7rem; }
+        .invite-help { margin: .4rem auto 0; font-size: .7rem; }
+      }
     </style>
   </head>
   <body>
@@ -40,8 +64,43 @@
         <p class="motto">Choose a plot · Settle in · Belong</p>
         <p class="intro">We are building a neighborhood of our own—one shaped by the people who call it home. Choose your plot, settle in, and help us bring the community to life. Join our Discord through the link below.</p>
         <a class="discord-button" href="https://discord.gg/mSsTgJaYZu" rel="noopener noreferrer"><span class="discord-mark" aria-hidden="true"></span>Join Our Discord <span aria-hidden="true">→</span></a>
-        <p class="invite-code">discord.gg/mSsTgJaYZu</p>
+        <button class="copy-invite" type="button" data-invite="https://discord.gg/mSsTgJaYZu" aria-describedby="invite-help">
+          <span class="invite-code">discord.gg/mSsTgJaYZu</span>
+          <span class="copy-action" aria-live="polite">Copy link</span>
+        </button>
+        <p class="invite-help" id="invite-help">Browser giving you trouble? Copy the invite, then in Discord choose <strong>Add a Server</strong> → <strong>Join a Server</strong> and paste it.</p>
       </section>
     </main>
+    <script>
+      const copyButton = document.querySelector('.copy-invite');
+      const copyLabel = copyButton.querySelector('.copy-action');
+
+      copyButton.addEventListener('click', async () => {
+        const invite = copyButton.dataset.invite;
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(invite);
+          } else {
+            const field = document.createElement('textarea');
+            field.value = invite;
+            field.style.position = 'fixed';
+            field.style.opacity = '0';
+            document.body.appendChild(field);
+            field.select();
+            document.execCommand('copy');
+            field.remove();
+          }
+          copyLabel.textContent = 'Copied!';
+          copyButton.setAttribute('aria-label', 'Discord invite copied');
+        } catch {
+          copyLabel.textContent = 'Select & copy';
+          window.getSelection()?.selectAllChildren(copyButton.querySelector('.invite-code'));
+        }
+        window.setTimeout(() => {
+          copyLabel.textContent = 'Copy link';
+          copyButton.removeAttribute('aria-label');
+        }, 2400);
+      });
+    </script>
   </body>
 </html>
