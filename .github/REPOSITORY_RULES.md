@@ -24,12 +24,30 @@ and needs your approving review. `.github/CODEOWNERS` assigns every file to
 `@tajious`, so "require review from Code Owners" resolves to you alone. Nobody
 else can merge, and an administrator override does not get around it either.
 
-You are the one entry on the bypass list, which matters for one specific case.
-GitHub will not let you approve a pull request that you authored, and a rule
-requiring one approving review counts nobody else, so without a bypass your own
-pull requests could never be merged by anyone. The bypass closes that gap and
-nothing more: it applies to you, so contributors still cannot merge their own
-work without your review.
+You are the one entry on the bypass list. Be precise about what that does and
+does not do, because the difference is not obvious.
+
+It lets you **push straight to `main`**, so your own changes ship without a pull
+request. It does **not** let you merge a pull request you authored: GitHub does
+not count a pull request's author as one of its approving reviewers, and the
+rule requires one. That combination is worth knowing before you plan a workflow
+around it, because it is not fixable from the ruleset side.
+
+## How changes land
+
+Two paths, because the ruleset treats them differently.
+
+- **Anyone else** opens a pull request. CI has to pass, you have to approve it,
+  and you merge it. Nobody can merge it without you, and `--admin` does not get
+  around that.
+- **You** push to `main` directly. The bypass actor covers the push. Keep
+  `npm run check` green locally first, since nothing else will catch a broken
+  build.
+
+The predictable failure mode: opening a pull request for your own change and
+then finding it unmergeable. Push to `main` instead. If you would rather have
+your own work reviewed too, add a second maintainer to `.github/CODEOWNERS` so
+one of you can approve the other, and then the bypass is no longer load bearing.
 
 Changes to the ruleset are made from Settings → Rules → Rulesets, or:
 
@@ -49,7 +67,6 @@ present, including the ones set to false.
 the job and you must rename it in the ruleset too, otherwise every pull request
 will be stuck waiting for a check that never reports.
 
-**Adding a second maintainer is still the stronger setup.** The bypass trusts one
-account with unreviewed merges. If someone else ever needs to help, put them in
-`.github/CODEOWNERS` so one of you can review the other, and the bypass stops
-being the only path.
+**Adding a second maintainer is the stronger setup.** The bypass trusts one
+account to push to `main` unreviewed, which is what makes solo work possible but
+is also the one soft spot. A second code owner removes the need for it.
