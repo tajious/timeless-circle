@@ -1,0 +1,23 @@
+{
+  "name": "timeless-circle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page for the Timeless Circle neighborhood",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tajious/timeless-circle.git"
+  },
+  "homepage": "https://timeless-circle.world",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint:html": "html-validate \"**/*.html\"",
+    "check": "npm run format:check && npm run lint:html",
+    "serve": "npx --yes serve ."
+  },
+  "devDependencies": {
+    "html-validate": "^9.7.1",
+    "prettier": "^3.6.2"
+  }
+}

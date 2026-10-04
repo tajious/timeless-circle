@@ -1,0 +1,42 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Format and validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run check
+
+      - name: Verify the image builds
+        run: docker build --tag timeless-circle:${{ github.sha }} .
+
+      - name: Verify nginx accepts the config
+        run: |
+          docker run --detach --name timeless-circle timeless-circle:${{ github.sha }}
+          sleep 2
+          docker exec timeless-circle nginx -t
+          docker exec timeless-circle wget --quiet --tries=1 --spider http://127.0.0.1/
+          docker stop timeless-circle

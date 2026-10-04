@@ -1,0 +1,44 @@
+name: Bug report
+description: Something on the landing page is broken or wrong
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you see, and what did you expect instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the page
+        2. Resize the window to ...
+        3. ...
+    validations:
+      required: true
+
+  - type: input
+    id: viewport
+    attributes:
+      label: Screen size and browser
+      placeholder: "Chrome 131 on Windows, 1440x900"
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: A screenshot makes layout bugs much faster to fix.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched the open issues and this is not already reported
+          required: true
