@@ -15,21 +15,32 @@ ruleset enforces so the settings are not guesswork.
 - **Require status checks to pass** — enabled
   - Required status check: `Format and validate`
   - Require branches to be up to date before merging: **enabled**
-- **Bypass list** — empty
+- **Bypass list** — `@tajious`, mode _always_
 
 ## What this gives you
 
 Every change to `main` arrives through a pull request, needs a passing CI run,
 and needs your approving review. `.github/CODEOWNERS` assigns every file to
-`@tajious`, so "require review from Code Owners" resolves to you alone. Because
-the bypass list is empty, nobody can skip the ruleset, including administrators.
+`@tajious`, so "require review from Code Owners" resolves to you alone. Nobody
+else can merge, and an administrator override does not get around it either.
+
+You are the one entry on the bypass list, which matters for one specific case.
+GitHub will not let you approve a pull request that you authored, and a rule
+requiring one approving review counts nobody else, so without a bypass your own
+pull requests could never be merged by anyone. The bypass closes that gap and
+nothing more: it applies to you, so contributors still cannot merge their own
+work without your review.
 
 Changes to the ruleset are made from Settings → Rules → Rulesets, or:
 
 ```bash
 gh api repos/tajious/timeless-circle/rulesets
-gh api repos/tajious/timeless-circle/rulesets/24471165 -X PATCH --input updated.json
+gh api repos/tajious/timeless-circle/rulesets/24471165 -X PUT --input updated.json
 ```
+
+A `PUT` replaces the whole ruleset, so the payload has to include every rule.
+The API also rejects a `pull_request` rule unless all five of its parameters are
+present, including the ones set to false.
 
 ## Two things worth knowing
 
@@ -38,9 +49,7 @@ gh api repos/tajious/timeless-circle/rulesets/24471165 -X PATCH --input updated.
 the job and you must rename it in the ruleset too, otherwise every pull request
 will be stuck waiting for a check that never reports.
 
-**Approval of your own pull requests.** GitHub does not let you approve a pull
-request that you authored, and a ruleset that requires one approving review
-counts nobody else. So pull requests you open yourself cannot be merged by you
-alone. That is the right trade for a repository whose changes come from
-contributors. If you want to ship your own work through the same path, add a
-second maintainer to `.github/CODEOWNERS` so one of you can review the other.
+**Adding a second maintainer is still the stronger setup.** The bypass trusts one
+account with unreviewed merges. If someone else ever needs to help, put them in
+`.github/CODEOWNERS` so one of you can review the other, and the bypass stops
+being the only path.
