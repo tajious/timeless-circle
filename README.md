@@ -76,8 +76,9 @@ one there over hunting for a hard-coded value.
 
 ## Contributing
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) first. Every change lands through a pull
-request and needs an approving review before it can merge.
+Every change from someone else lands through a pull request and needs an
+approving review before it can merge. There is no contribution guide; the pull
+request template is the short version of what is expected.
 
 ## License
 

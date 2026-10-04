@@ -9,7 +9,5 @@ package.json
 package-lock.json
 node_modules
 README.md
-CONTRIBUTING.md
-CODE_OF_CONDUCT.md
 SECURITY.md
 LICENSE
