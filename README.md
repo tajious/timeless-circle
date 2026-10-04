@@ -1,5 +1,7 @@
 # Timeless Circle
 
+[![Check](https://github.com/tajious/timeless-circle/actions/workflows/check.yml/badge.svg)](https://github.com/tajious/timeless-circle/actions/workflows/check.yml)
+
 The landing page for the Timeless Circle neighborhood, live at
 [timeless-circle.world](https://timeless-circle.world).
 
